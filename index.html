@@ -27,13 +27,13 @@
     header {
       background-color: var(--card-bg);
       border-bottom: 1px solid var(--border-color);
-      padding: 24px 20px;
+      padding: 20px 16px;
       text-align: center;
     }
 
     header h1 {
-      margin: 0 0 8px 0;
-      font-size: 1.8rem;
+      margin: 0 0 4px 0;
+      font-size: 1.6rem;
       letter-spacing: -0.025em;
       color: var(--primary);
     }
@@ -41,19 +41,37 @@
     header p {
       margin: 0;
       color: var(--text-muted);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
 
     main {
-      max-width: 1200px;
+      max-width: 1300px;
       margin: 0 auto;
-      padding: 32px 16px;
+      padding: 16px 8px;
     }
 
+    /* Responsive Grid: 2 cols on mobile, 3 on tablet, 4 on laptop */
     #product-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    @media (min-width: 640px) {
+      #product-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+      main {
+        padding: 24px 16px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      #product-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+      }
     }
 
     .product-card {
@@ -61,18 +79,26 @@
       flex-direction: column;
       justify-content: space-between;
       border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 16px;
+      border-radius: 6px;
+      padding: 10px;
       background: var(--card-bg);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
     }
 
+    @media (min-width: 640px) {
+      .product-card {
+        padding: 14px;
+        border-radius: 8px;
+      }
+    }
+
+    /* 4:3 Portrait Ratio Box */
     .img-wrapper {
       width: 100%;
-      height: 220px;
+      aspect-ratio: 3 / 4;
       overflow: hidden;
-      border-radius: 6px;
-      margin-bottom: 12px;
+      border-radius: 4px;
+      margin-bottom: 8px;
       background-color: #f1f5f9;
     }
 
@@ -83,56 +109,84 @@
     }
 
     .card-body h3 {
-      margin: 0 0 4px 0;
-      font-size: 1.15rem;
+      margin: 0 0 2px 0;
+      font-size: 0.95rem;
       color: var(--primary);
     }
 
+    @media (min-width: 640px) {
+      .card-body h3 {
+        font-size: 1.1rem;
+      }
+    }
+
     .wood-type {
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       color: var(--text-muted);
-      margin: 0 0 8px 0;
+      margin: 0 0 6px 0;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
 
     .price {
       font-weight: 700;
-      font-size: 1.1rem;
+      font-size: 0.95rem;
       color: var(--accent);
-      margin: 0 0 8px 0;
+      margin: 0 0 6px 0;
     }
 
     .price-header {
       font-weight: 700;
-      font-size: 1.05rem;
+      font-size: 0.95rem;
       color: var(--accent);
-      margin: 4px 0 12px 0;
+      margin: 2px 0 8px 0;
     }
 
     .stock {
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       color: var(--text-muted);
-      margin: 0 0 12px 0;
+      margin: 0 0 8px 0;
+    }
+
+    /* Compact checklist area */
+    .variant-list-container {
+      margin: 8px 0;
+      border-top: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+      padding: 6px 0;
+    }
+
+    .variant-header-row {
+      display: flex;
+      justify-content: flex-end;
+      font-size: 0.7rem;
+      color: var(--text-muted;);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+      padding-right: 2px;
     }
 
     .variant-list {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 4px; /* Tighter vertical spacing */
       text-align: left;
-      margin: 12px 0;
-      border-top: 1px solid var(--border-color);
-      border-bottom: 1px solid var(--border-color);
-      padding: 12px 0;
     }
 
     .variant-option {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 0.9rem;
+      gap: 6px;
+      font-size: 0.8rem;
       cursor: pointer;
+    }
+
+    @media (min-width: 640px) {
+      .variant-option {
+        font-size: 0.85rem;
+        gap: 8px;
+      }
     }
 
     .variant-option.out-of-stock {
@@ -140,21 +194,21 @@
       cursor: not-allowed;
     }
 
-    .variant-option small {
+    .variant-stock {
       margin-left: auto;
       color: var(--text-muted);
-      font-size: 0.8rem;
+      font-size: 0.75rem;
     }
 
     .card-footer {
       margin-top: auto;
-      padding-top: 12px;
+      padding-top: 8px;
     }
 
     .group-total {
       font-weight: 600;
-      font-size: 1rem;
-      margin: 0 0 8px 0;
+      font-size: 0.9rem;
+      margin: 0 0 6px 0;
       color: var(--primary);
     }
 
@@ -163,11 +217,20 @@
       background-color: var(--primary);
       color: white;
       border: none;
-      padding: 10px 16px;
-      border-radius: 6px;
+      padding: 8px 12px;
+      border-radius: 4px;
       font-weight: 600;
+      font-size: 0.85rem;
       cursor: pointer;
       transition: background-color 0.2s;
+    }
+
+    @media (min-width: 640px) {
+      button {
+        padding: 10px 16px;
+        border-radius: 6px;
+        font-size: 0.9rem;
+      }
     }
 
     button:hover:not(:disabled) {
@@ -286,11 +349,17 @@
             ? `<p class="price-header">£${firstPrice.toFixed(2)} each</p>` 
             : '';
 
-          let optionsHTML = '<div class="variant-list">';
+          let optionsHTML = `
+            <div class="variant-list-container">
+              <div class="variant-header-row">
+                <span>Stock</span>
+              </div>
+              <div class="variant-list">
+          `;
+
           items.forEach(item => {
             const stockCount = parseInt(item.stock) || 0;
             const disabled = stockCount <= 0;
-            const woodLabel = item.wood ? item.wood : item.desc;
             const formattedPrice = parseFloat(item.price).toFixed(2);
 
             // Include price next to item ONLY if prices vary in this group
@@ -304,12 +373,12 @@
                        data-price="${item.price}" 
                        ${disabled ? 'disabled' : ''} 
                        onchange="updateGroupTotal('${key}')">
-                <span><strong>${item.id}:</strong> ${woodLabel}${priceTag}</span>
-                <small>(${disabled ? 'Sold out' : `Stock: ${stockCount}`})</small>
+                <span><strong>${item.id}</strong>${priceTag}</span>
+                <span class="variant-stock">${disabled ? '0' : stockCount}</span>
               </label>
             `;
           });
-          optionsHTML += '</div>';
+          optionsHTML += `</div></div>`;
 
           card.innerHTML = `
             <div>
@@ -351,4 +420,3 @@
   </script>
 </body>
 </html>
-
