@@ -92,10 +92,10 @@
       }
     }
 
-    /* 4:3 Portrait Ratio Box */
+    /* 1:1 Square Ratio Box (Auto-fits uploaded images with object-fit) */
     .img-wrapper {
       width: 100%;
-      aspect-ratio: 3 / 4;
+      aspect-ratio: 1 / 1;
       overflow: hidden;
       border-radius: 4px;
       margin-bottom: 4px;
@@ -196,11 +196,20 @@
       display: none;
     }
 
+    .pill-price {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
     .pill-option.selected {
       background: var(--primary);
       color: #ffffff;
       border-color: var(--primary);
       font-weight: 600;
+    }
+
+    .pill-option.selected .pill-price {
+      color: #ffffff;
     }
 
     .pill-option.out-of-stock {
@@ -340,7 +349,7 @@
 
     .modal-img {
       width: 100%;
-      aspect-ratio: 4 / 3;
+      aspect-ratio: 1 / 1;
       object-fit: cover;
       border-radius: 4px;
       margin-bottom: 12px;
@@ -488,17 +497,16 @@
           let innerOptionsHTML = '';
 
           if (layoutType === 'collection') {
-            // --- COLLECTION: Compact Tap-to-Toggle Pills (with Wood + Price if prices vary) ---
+            // --- COLLECTION: Compact Tap-to-Toggle Pills (Wood + Accent Price) ---
             innerOptionsHTML = '<div class="pill-container">';
             items.forEach(item => {
               const stockCount = parseInt(item.stock) || 0;
               const disabled = stockCount <= 0;
               const labelBase = item.short_name ? item.short_name : (item.wood ? item.wood : item.id);
               
-              // Include price on pill if prices are not all uniform
-              const pillLabel = pricesAllSame 
-                ? labelBase 
-                : `${labelBase} — £${parseFloat(item.price).toFixed(2)}`;
+              const labelHTML = pricesAllSame 
+                ? `<span>${labelBase}</span>` 
+                : `<span>${labelBase}</span> <span class="pill-price">£${parseFloat(item.price).toFixed(2)}</span>`;
 
               innerOptionsHTML += `
                 <label class="pill-option ${disabled ? 'out-of-stock' : ''}">
@@ -508,7 +516,7 @@
                          data-price="${item.price}" 
                          ${disabled ? 'disabled' : ''} 
                          onchange="togglePill(this, '${key}')">
-                  <span>${pillLabel}</span>
+                  ${labelHTML}
                 </label>
               `;
             });
@@ -527,7 +535,7 @@
               const disabled = stockCount <= 0;
               const woodLabel = item.wood ? item.wood : item.desc;
               const formattedPrice = parseFloat(item.price).toFixed(2);
-              const priceTag = pricesAllSame ? '' : ` — <strong>£${formattedPrice}</strong>`;
+              const priceTag = pricesAllSame ? '' : ` — <strong style="color: var(--accent);">£${formattedPrice}</strong>`;
 
               innerOptionsHTML += `
                 <label class="variant-option ${disabled ? 'out-of-stock' : ''}">
