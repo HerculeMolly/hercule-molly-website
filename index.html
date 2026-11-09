@@ -92,7 +92,7 @@
       }
     }
 
-    /* 4:3 Portrait Ratio Box */
+    /* Strict 4:3 Portrait Ratio Box */
     .img-wrapper {
       width: 100%;
       aspect-ratio: 3 / 4;
@@ -142,13 +142,50 @@
       margin: 2px 0 8px 0;
     }
 
-    .stock {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin: 0 0 8px 0;
+    /* Collection Tap-to-Toggle Pill Grid */
+    .pill-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 8px 0;
+      border-top: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+      padding: 8px 0;
     }
 
-    /* Compact checklist area */
+    .pill-option {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-color);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s ease;
+    }
+
+    .pill-option input[type="checkbox"] {
+      display: none;
+    }
+
+    .pill-option.selected {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+      font-weight: 600;
+    }
+
+    .pill-option.out-of-stock {
+      opacity: 0.35;
+      cursor: not-allowed;
+      background: #e2e8f0;
+    }
+
+    /* Variant List for multi-price or detailed items */
     .variant-list-container {
       margin: 8px 0;
       border-top: 1px solid var(--border-color);
@@ -160,7 +197,7 @@
       display: flex;
       justify-content: flex-end;
       font-size: 0.7rem;
-      color: var(--text-muted;);
+      color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.05em;
       margin-bottom: 4px;
@@ -170,7 +207,7 @@
     .variant-list {
       display: flex;
       flex-direction: column;
-      gap: 4px; /* Tighter vertical spacing */
+      gap: 4px;
       text-align: left;
     }
 
@@ -329,7 +366,6 @@
                 <h3>${p.desc}</h3>
                 <p class="wood-type">${p.wood || ''}</p>
                 <p class="price">£${parseFloat(p.price).toFixed(2)}</p>
-                <p class="stock">${isOut ? 'Out of Stock' : `Stock: ${stockCount}`}</p>
               </div>
             </div>
             <div class="card-footer">
@@ -337,11 +373,11 @@
             </div>
           `;
         } else {
-          // --- GROUPED ITEM BOX ---
+          // --- GROUPED BOX ---
           const mainDesc = items[0].desc;
           const mainImage = items[0].image;
+          const layoutType = items[0].layout ? items[0].layout.toLowerCase() : 'collection';
 
-          // Check if all variant prices are identical
           const firstPrice = parseFloat(items[0].price);
           const pricesAllSame = items.every(i => parseFloat(i.price) === firstPrice);
 
@@ -349,36 +385,60 @@
             ? `<p class="price-header">£${firstPrice.toFixed(2)} each</p>` 
             : '';
 
-          let optionsHTML = `
-            <div class="variant-list-container">
-              <div class="variant-header-row">
-                <span>Stock</span>
-              </div>
-              <div class="variant-list">
-          `;
+          let innerOptionsHTML = '';
 
-          items.forEach(item => {
-            const stockCount = parseInt(item.stock) || 0;
-            const disabled = stockCount <= 0;
-            const formattedPrice = parseFloat(item.price).toFixed(2);
+          if (layoutType === 'collection') {
+            // --- LAYOUT TYPE 1: COLLECTION (Compact Tap-to-Toggle Pills) ---
+            innerOptionsHTML = '<div class="pill-container">';
+            items.forEach(item => {
+              const stockCount = parseInt(item.stock) || 0;
+              const disabled = stockCount <= 0;
+              const pillLabel = item.short_name ? item.short_name : (item.wood ? item.wood : item.id);
 
-            // Include price next to item ONLY if prices vary in this group
-            const priceTag = pricesAllSame ? '' : ` — <strong>£${formattedPrice}</strong>`;
-
-            optionsHTML += `
-              <label class="variant-option ${disabled ? 'out-of-stock' : ''}">
-                <input type="checkbox" 
-                       name="group-${key}" 
-                       value="${item.id}" 
-                       data-price="${item.price}" 
-                       ${disabled ? 'disabled' : ''} 
-                       onchange="updateGroupTotal('${key}')">
-                <span><strong>${item.id}</strong>${priceTag}</span>
-                <span class="variant-stock">${disabled ? '0' : stockCount}</span>
-              </label>
+              innerOptionsHTML += `
+                <label class="pill-option ${disabled ? 'out-of-stock' : ''}">
+                  <input type="checkbox" 
+                         name="group-${key}" 
+                         value="${item.id}" 
+                         data-price="${item.price}" 
+                         ${disabled ? 'disabled' : ''} 
+                         onchange="togglePill(this, '${key}')">
+                  <span>${pillLabel}</span>
+                </label>
+              `;
+            });
+            innerOptionsHTML += '</div>';
+          } else {
+            // --- LAYOUT TYPE 2: VARIANT LIST (Wood options with varying prices) ---
+            innerOptionsHTML = `
+              <div class="variant-list-container">
+                <div class="variant-header-row">
+                  <span>Stock</span>
+                </div>
+                <div class="variant-list">
             `;
-          });
-          optionsHTML += `</div></div>`;
+            items.forEach(item => {
+              const stockCount = parseInt(item.stock) || 0;
+              const disabled = stockCount <= 0;
+              const woodLabel = item.wood ? item.wood : item.desc;
+              const formattedPrice = parseFloat(item.price).toFixed(2);
+              const priceTag = pricesAllSame ? '' : ` — <strong>£${formattedPrice}</strong>`;
+
+              innerOptionsHTML += `
+                <label class="variant-option ${disabled ? 'out-of-stock' : ''}">
+                  <input type="checkbox" 
+                         name="group-${key}" 
+                         value="${item.id}" 
+                         data-price="${item.price}" 
+                         ${disabled ? 'disabled' : ''} 
+                         onchange="updateGroupTotal('${key}')">
+                  <span><strong>${item.id}</strong> — ${woodLabel}${priceTag}</span>
+                  <span class="variant-stock">${disabled ? '0' : stockCount}</span>
+                </label>
+              `;
+            });
+            innerOptionsHTML += `</div></div>`;
+          }
 
           card.innerHTML = `
             <div>
@@ -388,7 +448,7 @@
               <div class="card-body">
                 <h3>${mainDesc}</h3>
                 ${priceHeader}
-                ${optionsHTML}
+                ${innerOptionsHTML}
               </div>
             </div>
             <div class="card-footer">
@@ -400,6 +460,16 @@
 
         container.appendChild(card);
       });
+    }
+
+    function togglePill(checkbox, groupKey) {
+      const label = checkbox.closest('.pill-option');
+      if (checkbox.checked) {
+        label.classList.add('selected');
+      } else {
+        label.classList.remove('selected');
+      }
+      updateGroupTotal(groupKey);
     }
 
     function updateGroupTotal(groupKey) {
