@@ -69,7 +69,7 @@
 
     .img-wrapper {
       width: 100%;
-      height: 200px;
+      height: 220px;
       overflow: hidden;
       border-radius: 6px;
       margin-bottom: 12px;
@@ -222,7 +222,6 @@
         const currentLine = lines[i].trim();
         if (!currentLine) continue;
 
-        // Simple CSV parser supporting standard rows
         const values = currentLine.split(',').map(val => val.trim());
         const item = {};
         headers.forEach((header, index) => {
@@ -239,7 +238,6 @@
 
       const grouped = {};
       products.forEach(item => {
-        // Skip drafts if status column exists
         if (item.status && item.status.toLowerCase() === 'draft') return;
 
         const key = item.group_id && item.group_id.trim() !== '' ? item.group_id : item.id;
@@ -306,7 +304,7 @@
                        data-price="${item.price}" 
                        ${disabled ? 'disabled' : ''} 
                        onchange="updateGroupTotal('${key}')">
-                <span>${woodLabel}${priceTag}</span>
+                <span><strong>${item.id}:</strong> ${woodLabel}${priceTag}</span>
                 <small>(${disabled ? 'Sold out' : `Stock: ${stockCount}`})</small>
               </label>
             `;
