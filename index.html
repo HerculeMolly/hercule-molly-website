@@ -3,89 +3,353 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hercule Molly | Handcrafted Woodcraft</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+  <title>Hercule Molly - Quality Woodcraft Gifts</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #222; background: #fdfdfd; line-height: 1.5; padding: 1.5rem; max-width: 1200px; margin: 0 auto; }
-    header { text-align: center; padding: 2rem 0 1rem; border-bottom: 1px solid #eee; }
-    h1 { font-size: 2rem; letter-spacing: 0.05em; text-transform: uppercase; }
-    .hero-banner { background: #f4f1ea; padding: 1.25rem; border-radius: 6px; text-align: center; margin: 1.5rem 0 2.5rem; }
-    .hero-banner p { font-size: 1rem; color: #444; font-weight: 5rem; }
-    
-    /* Responsive Grid: 2 cols on mobile, 3 cols on tablet, 4 cols on desktop */
-    .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
-    @media (min-width: 600px) { .product-grid { grid-template-columns: repeat(3, 1fr); } }
-    @media (min-width: 900px) { .product-grid { grid-template-columns: repeat(4, 1fr); } }
-    
-    .card { border: 1px solid #e5e5e5; border-radius: 6px; overflow: hidden; background: #fff; display: flex; flex-direction: column; justify: space-between; }
-    .card img { width: 100%; height: 180px; object-fit: cover; background: #eee; }
-    .card-body { padding: 1rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-    .card-title { font-size: 1rem; font-weight: 600; margin-bottom: 0.25rem; }
-    .wood-tag { font-size: 0.8rem; color: #6b5b4b; background: #f0ebd9; display: inline-block; padding: 0.2rem 0.5rem; border-radius: 3px; margin-bottom: 0.75rem; width: fit-content; }
-    .price { font-size: 1.1rem; font-weight: 700; color: #111; margin-bottom: 0.75rem; }
-    .btn-buy { width: 100%; background: #2b2b2b; color: #fff; border: none; padding: 0.6rem; font-size: 0.9rem; font-weight: 600; border-radius: 4px; cursor: pointer; text-align: center; text-decoration: none; display: block; }
-    .btn-buy:hover { background: #444; }
+    :root {
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-color: #1e293b;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --primary: #0f172a;
+      --primary-hover: #334155;
+      --accent: #b45309;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      padding: 24px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0 0 8px 0;
+      font-size: 1.8rem;
+      letter-spacing: -0.025em;
+      color: var(--primary);
+    }
+
+    header p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 16px;
+    }
+
+    #product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .product-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      background: var(--card-bg);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .img-wrapper {
+      width: 100%;
+      height: 200px;
+      overflow: hidden;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      background-color: #f1f5f9;
+    }
+
+    .img-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-body h3 {
+      margin: 0 0 4px 0;
+      font-size: 1.15rem;
+      color: var(--primary);
+    }
+
+    .wood-type {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin: 0 0 8px 0;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .price {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--accent);
+      margin: 0 0 8px 0;
+    }
+
+    .price-header {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--accent);
+      margin: 4px 0 12px 0;
+    }
+
+    .stock {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin: 0 0 12px 0;
+    }
+
+    .variant-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      text-align: left;
+      margin: 12px 0;
+      border-top: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 0;
+    }
+
+    .variant-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .variant-option.out-of-stock {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .variant-option small {
+      margin-left: auto;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    .card-footer {
+      margin-top: auto;
+      padding-top: 12px;
+    }
+
+    .group-total {
+      font-weight: 600;
+      font-size: 1rem;
+      margin: 0 0 8px 0;
+      color: var(--primary);
+    }
+
+    button {
+      width: 100%;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button:hover:not(:disabled) {
+      background-color: var(--primary-hover);
+    }
+
+    button:disabled {
+      background-color: #cbd5e1;
+      cursor: not-allowed;
+    }
+
+    #loading {
+      text-align: center;
+      grid-column: 1 / -1;
+      color: var(--text-muted);
+      padding: 40px;
+    }
   </style>
 </head>
 <body>
 
   <header>
     <h1>Hercule Molly</h1>
+    <p>Quality Woodcraft Gifts</p>
   </header>
 
-  <section class="hero-banner">
-    <p>Handcrafted woodcraft made exclusively from patient, air-dried timber and rescued architectural hardwoods.</p>
-  </section>
-
-  <main class="product-grid" id="grid"></main>
+  <main>
+    <div id="product-grid">
+      <div id="loading">Loading catalog...</div>
+    </div>
+  </main>
 
   <script>
-    Papa.parse("products.csv", {
-      download: true,
-      header: true,
-      complete: function(results) {
-        const grid = document.getElementById('grid');
-        results.data.forEach(item => {
-          // Case-insensitive check for active status
-          const isActive = item.category_status && item.category_status.trim().toLowerCase() === 'active';
-          
-          if (item.name && isActive) {
-            const stockQty = parseInt(item.stock, 10) || 0;
-            
-            // Handle stock badge and button state
-            let stockBadge = `<span style="font-size: 0.8rem; color: #4b6b58; background: #e8f0ec; padding: 0.2rem 0.5rem; border-radius: 3px; display: inline-block; margin-bottom: 0.75rem;">In Stock (${stockQty})</span>`;
-            let buttonHtml = `<button class="btn-buy" onclick="alert('Checkout process initializing for ${item.name}')">Buy Now</button>`;
-            
-            if (stockQty <= 0) {
-              stockBadge = `<span style="font-size: 0.8rem; color: #9a2a2a; background: #fbeaea; padding: 0.2rem 0.5rem; border-radius: 3px; display: inline-block; margin-bottom: 0.75rem;">Out of Stock</span>`;
-              buttonHtml = `<button class="btn-buy" style="background: #ccc; cursor: not-allowed;" disabled>Out of Stock</button>`;
-            }
-
-            const card = `
-              <div class="card">
-                <img src="${item.image}" alt="${item.name}">
-                <div class="card-body">
-                  <div>
-                    <h2 class="card-title">${item.name}</h2>
-                    <span class="wood-tag">${item.wood_origin}</span>
-                  </div>
-                  <div>
-                    ${stockBadge}
-                    <div class="price">£${item.price}</div>
-                    ${buttonHtml}
-                  </div>
-                </div>
-              </div>
-            `;
-            grid.innerHTML += card;
-          }
-        });
+    async function loadProducts() {
+      try {
+        const response = await fetch('products.csv');
+        const csvText = await response.text();
+        const products = parseCSV(csvText);
+        renderProducts(products);
+      } catch (error) {
+        console.error('Error loading products.csv:', error);
+        document.getElementById('product-grid').innerHTML = '<p style="text-align: center; color: red;">Could not load products. Please check products.csv format.</p>';
       }
-    });
+    }
+
+    function parseCSV(text) {
+      const lines = text.trim().split('\n');
+      const headers = lines[0].split(',').map(h => h.trim());
+      const result = [];
+
+      for (let i = 1; i < lines.length; i++) {
+        const currentLine = lines[i].trim();
+        if (!currentLine) continue;
+
+        // Simple CSV parser supporting standard rows
+        const values = currentLine.split(',').map(val => val.trim());
+        const item = {};
+        headers.forEach((header, index) => {
+          item[header] = values[index] !== undefined ? values[index] : '';
+        });
+        result.push(item);
+      }
+      return result;
+    }
+
+    function renderProducts(products) {
+      const container = document.getElementById('product-grid');
+      container.innerHTML = '';
+
+      const grouped = {};
+      products.forEach(item => {
+        // Skip drafts if status column exists
+        if (item.status && item.status.toLowerCase() === 'draft') return;
+
+        const key = item.group_id && item.group_id.trim() !== '' ? item.group_id : item.id;
+        if (!grouped[key]) grouped[key] = [];
+        grouped[key].push(item);
+      });
+
+      Object.keys(grouped).forEach(key => {
+        const items = grouped[key];
+        const isGrouped = items.length > 1;
+        const card = document.createElement('div');
+        card.className = 'product-card';
+
+        if (!isGrouped) {
+          // --- STANDALONE ITEM ---
+          const p = items[0];
+          const stockCount = parseInt(p.stock) || 0;
+          const isOut = stockCount <= 0;
+
+          card.innerHTML = `
+            <div>
+              <div class="img-wrapper">
+                <img src="${p.image}" alt="${p.desc}" />
+              </div>
+              <div class="card-body">
+                <h3>${p.desc}</h3>
+                <p class="wood-type">${p.wood || ''}</p>
+                <p class="price">£${parseFloat(p.price).toFixed(2)}</p>
+                <p class="stock">${isOut ? 'Out of Stock' : `Stock: ${stockCount}`}</p>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button ${isOut ? 'disabled' : ''}>${isOut ? 'Sold Out' : 'Buy Now'}</button>
+            </div>
+          `;
+        } else {
+          // --- GROUPED ITEM BOX ---
+          const mainDesc = items[0].desc;
+          const mainImage = items[0].image;
+
+          // Check if all variant prices are identical
+          const firstPrice = parseFloat(items[0].price);
+          const pricesAllSame = items.every(i => parseFloat(i.price) === firstPrice);
+
+          let priceHeader = pricesAllSame 
+            ? `<p class="price-header">£${firstPrice.toFixed(2)} each</p>` 
+            : '';
+
+          let optionsHTML = '<div class="variant-list">';
+          items.forEach(item => {
+            const stockCount = parseInt(item.stock) || 0;
+            const disabled = stockCount <= 0;
+            const woodLabel = item.wood ? item.wood : item.desc;
+            const formattedPrice = parseFloat(item.price).toFixed(2);
+
+            // Include price next to item ONLY if prices vary in this group
+            const priceTag = pricesAllSame ? '' : ` — <strong>£${formattedPrice}</strong>`;
+
+            optionsHTML += `
+              <label class="variant-option ${disabled ? 'out-of-stock' : ''}">
+                <input type="checkbox" 
+                       name="group-${key}" 
+                       value="${item.id}" 
+                       data-price="${item.price}" 
+                       ${disabled ? 'disabled' : ''} 
+                       onchange="updateGroupTotal('${key}')">
+                <span>${woodLabel}${priceTag}</span>
+                <small>(${disabled ? 'Sold out' : `Stock: ${stockCount}`})</small>
+              </label>
+            `;
+          });
+          optionsHTML += '</div>';
+
+          card.innerHTML = `
+            <div>
+              <div class="img-wrapper">
+                <img src="${mainImage}" alt="${mainDesc}" />
+              </div>
+              <div class="card-body">
+                <h3>${mainDesc}</h3>
+                ${priceHeader}
+                ${optionsHTML}
+              </div>
+            </div>
+            <div class="card-footer">
+              <p class="group-total" id="total-${key}">Total: £0.00</p>
+              <button id="btn-${key}" disabled>Add Selected to Order</button>
+            </div>
+          `;
+        }
+
+        container.appendChild(card);
+      });
+    }
+
+    function updateGroupTotal(groupKey) {
+      const checkboxes = document.querySelectorAll(`input[name="group-${groupKey}"]:checked`);
+      let total = 0;
+      checkboxes.forEach(cb => {
+        total += parseFloat(cb.getAttribute('data-price'));
+      });
+
+      const totalEl = document.getElementById(`total-${groupKey}`);
+      const btnEl = document.getElementById(`btn-${groupKey}`);
+
+      totalEl.innerText = `Total: £${total.toFixed(2)}`;
+      btnEl.disabled = checkboxes.length === 0;
+    }
+
+    loadProducts();
   </script>
-
-
 </body>
 </html>
-
