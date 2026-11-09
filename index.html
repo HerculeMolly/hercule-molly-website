@@ -169,6 +169,7 @@
     .pill-option {
       display: inline-flex;
       align-items: center;
+      gap: 4px;
       padding: 3px 6px;
       background: #f1f5f9;
       border: 1px solid #cbd5e1;
@@ -260,21 +261,13 @@
       font-size: 0.7rem;
     }
 
-    /* Fixed footer alignment to guarantee price & button lock */
+    /* Fixed footer alignment */
     .card-footer {
       margin-top: auto;
       padding-top: 4px;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      min-height: 48px;
-    }
-
-    .group-total {
-      font-weight: 600;
-      font-size: 0.8rem;
-      margin: 0 0 4px 0;
-      color: var(--primary);
     }
 
     button {
@@ -487,19 +480,25 @@
           const firstPrice = parseFloat(items[0].price);
           const pricesAllSame = items.every(i => parseFloat(i.price) === firstPrice);
 
-          let priceHeader = pricesAllSame 
-            ? `<p class="price-header">£${firstPrice.toFixed(2)} each</p>` 
-            : '';
+          let priceHeader = '';
+          if (pricesAllSame) {
+            priceHeader = `<p class="price-header">£${firstPrice.toFixed(2)} each</p>`;
+          }
 
           let innerOptionsHTML = '';
 
           if (layoutType === 'collection') {
-            // --- COLLECTION: Compact Tap-to-Toggle Pills ---
+            // --- COLLECTION: Compact Tap-to-Toggle Pills (with Wood + Price if prices vary) ---
             innerOptionsHTML = '<div class="pill-container">';
             items.forEach(item => {
               const stockCount = parseInt(item.stock) || 0;
               const disabled = stockCount <= 0;
-              const pillLabel = item.short_name ? item.short_name : (item.wood ? item.wood : item.id);
+              const labelBase = item.short_name ? item.short_name : (item.wood ? item.wood : item.id);
+              
+              // Include price on pill if prices are not all uniform
+              const pillLabel = pricesAllSame 
+                ? labelBase 
+                : `${labelBase} — £${parseFloat(item.price).toFixed(2)}`;
 
               innerOptionsHTML += `
                 <label class="pill-option ${disabled ? 'out-of-stock' : ''}">
@@ -537,7 +536,7 @@
                          value="${item.id}" 
                          data-price="${item.price}" 
                          ${disabled ? 'disabled' : ''} 
-                         onchange="updateGroupTotal('${key}')">
+                         onchange="updateGroupButton('${key}')">
                   <span><strong>${item.id}</strong> — ${woodLabel}${priceTag}</span>
                   <span class="variant-stock">${disabled ? '0' : stockCount}</span>
                 </label>
@@ -560,7 +559,6 @@
               </div>
             </div>
             <div class="card-footer">
-              <p class="group-total" id="total-${key}">Total: £0.00</p>
               <button id="btn-${key}" disabled>Add Selection</button>
             </div>
           `;
@@ -577,20 +575,12 @@
       } else {
         label.classList.remove('selected');
       }
-      updateGroupTotal(groupKey);
+      updateGroupButton(groupKey);
     }
 
-    function updateGroupTotal(groupKey) {
+    function updateGroupButton(groupKey) {
       const checkboxes = document.querySelectorAll(`input[name="group-${groupKey}"]:checked`);
-      let total = 0;
-      checkboxes.forEach(cb => {
-        total += parseFloat(cb.getAttribute('data-price'));
-      });
-
-      const totalEl = document.getElementById(`total-${groupKey}`);
       const btnEl = document.getElementById(`btn-${groupKey}`);
-
-      totalEl.innerText = `Total: £${total.toFixed(2)}`;
       btnEl.disabled = checkboxes.length === 0;
     }
 
