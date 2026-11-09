@@ -24,24 +24,29 @@
       padding: 0;
     }
 
+    /* Streamlined Side-by-Side Header */
     header {
       background-color: var(--card-bg);
       border-bottom: 1px solid var(--border-color);
-      padding: 12px 16px;
-      text-align: center;
+      padding: 8px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     header h1 {
-      margin: 0 0 2px 0;
-      font-size: 1.4rem;
+      margin: 0;
+      font-size: 1.1rem;
       letter-spacing: -0.025em;
       color: var(--primary);
+      order: 2;
     }
 
     header p {
       margin: 0;
       color: var(--text-muted);
-      font-size: 0.8rem;
+      font-size: 0.75rem;
+      order: 1;
     }
 
     main {
@@ -58,6 +63,15 @@
     }
 
     @media (min-width: 640px) {
+      header {
+        padding: 12px 20px;
+      }
+      header h1 {
+        font-size: 1.4rem;
+      }
+      header p {
+        font-size: 0.85rem;
+      }
       #product-grid {
         grid-template-columns: repeat(3, 1fr);
         gap: 12px;
@@ -133,12 +147,12 @@
       }
     }
 
-    /* Option Container with Fixed Height to Lock Alignment */
+    /* Option Container with Fixed Height & Tighter Bottom Margin */
     .pill-container {
       display: flex;
       flex-wrap: wrap;
       gap: 3px;
-      margin: 4px 0;
+      margin: 4px 0 2px 0;
       border-top: 1px solid var(--border-color);
       border-bottom: 1px solid var(--border-color);
       padding: 4px 0;
@@ -227,9 +241,9 @@
       }
     }
 
-    /* Variant List Container with fixed height matching pill-container */
+    /* Variant List Container with tighter bottom margin */
     .variant-list-container {
-      margin: 4px 0;
+      margin: 4px 0 2px 0;
       border-top: 1px solid var(--border-color);
       border-bottom: 1px solid var(--border-color);
       padding: 4px 0;
@@ -284,7 +298,7 @@
     /* Fixed Card Footer Alignment */
     .card-footer {
       margin-top: auto;
-      padding-top: 4px;
+      padding-top: 2px;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
@@ -377,8 +391,8 @@
 <body>
 
   <header>
+    <p>Quality Recycled Wood Gifts</p>
     <h1>Hercule Molly</h1>
-    <p>Quality Woodcraft Gifts</p>
   </header>
 
   <main>
