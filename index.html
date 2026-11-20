@@ -1,649 +1,1066 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hercule Molly - Quality Woodcraft Gifts</title>
+  <title>Workshop &amp; Studio — Recycled Woodcraft, Small Apps &amp; Rubbishy Watercolours</title>
+  <meta name="description" content="One-off recycled woodcraft built in Cambridgeshire, practical UK utility web apps, and slightly wonky watercolours.">
+
+  <!-- =====================================================================
+       SNIPCART V3 STYLES & PRECONNECTS
+       Zero tracking pixels or analytics scripts are included on this page,
+       keeping it strictly exempt from cookie consent pop-ups under UK PECR.
+       ===================================================================== -->
+  <link rel="preconnect" href="https://app.snipcart.com">
+  <link rel="preconnect" href="https://cdn.snipcart.com">
+  <link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.7.1/default/snipcart.css" />
+
   <style>
+    /* =====================================================================
+       1. DESIGN TOKENS & PAPER PALETTE (Ugmonk Calm + Field Notes Tactility)
+       ===================================================================== */
     :root {
-      --bg-color: #f8fafc;
-      --card-bg: #ffffff;
-      --text-color: #1e293b;
-      --text-muted: #64748b;
-      --border-color: #e2e8f0;
-      --primary: #0f172a;
-      --primary-hover: #334155;
-      --accent: #b45309;
+      --bg-paper: #F9F7F2;        /* Warm cotton-paper background */
+      --bg-card: #FFFFFF;         /* Crisp card surface */
+      --bg-subtle: #F1EDE4;       /* Muted card/box tint */
+      --ink-primary: #1F1F1F;     /* Deep charcoal typography */
+      --ink-secondary: #575550;   /* Muted graphite for specs & notes */
+      --ink-muted: #84817A;       /* Subtle labels */
+      --border-hairline: #DED9CE; /* Crisp 1px ruled lines */
+      --border-strong: #1F1F1F;   /* High-contrast structural borders */
+      --accent-workshop: #2C4C3B; /* Deep British racing/hedgerow green */
+      --accent-hover: #1E3529;
+      --sold-out-bg: #E8E4DA;
+      --sold-out-text: #7A766E;
+
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+
+      --radius: 3px;              /* Subtle, honest corners */
+      --container-max: 1080px;
+    }
+
+    /* =====================================================================
+       2. RESET & BASE TYPOGRAPHY
+       ===================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-color);
       margin: 0;
-      padding: 0;
+      background-color: var(--bg-paper);
+      color: var(--ink-primary);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* Strict Single-Line Header Layout */
-    header {
-      background-color: var(--card-bg);
-      border-bottom: 1px solid var(--border-color);
-      padding: 6px 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      white-space: nowrap;
-      overflow: hidden;
+    img {
+      display: block;
+      max-width: 100%;
     }
 
-    header p {
-      margin: 0;
-      color: var(--text-muted);
-      font-size: 0.7rem;
-      order: 1;
+    a {
+      color: inherit;
+      text-underline-offset: 3px;
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 0.95rem;
-      letter-spacing: -0.025em;
-      color: var(--primary);
-      order: 2;
-    }
-
-    main {
-      max-width: 1300px;
+    .container {
+      width: 100%;
+      max-width: var(--container-max);
       margin: 0 auto;
-      padding: 6px 4px;
+      padding: 0 1.25rem;
     }
 
-    /* Responsive Grid: 2 cols on mobile/mini, 3 on tablet, 4 on laptop */
-    #product-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 6px;
+    /* =====================================================================
+       3. HEADER & STICKY NAVIGATION
+       ===================================================================== */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background-color: rgba(249, 247, 242, 0.95);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid var(--border-hairline);
     }
 
-    @media (min-width: 640px) {
-      header {
-        padding: 10px 16px;
-      }
-      header h1 {
-        font-size: 1.3rem;
-      }
-      header p {
-        font-size: 0.85rem;
-      }
-      #product-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 12px;
-      }
-      main {
-        padding: 12px;
-      }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 64px;
+      gap: 1rem;
     }
 
-    @media (min-width: 1024px) {
-      #product-grid {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 16px;
-      }
-    }
-
-    .product-card {
+    .brand-mark {
+      text-decoration: none;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      padding: 5px;
-      background: var(--card-bg);
-      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
     }
 
-    @media (min-width: 640px) {
-      .product-card {
-        padding: 10px;
-        border-radius: 8px;
+    .brand-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+
+    .brand-sub {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--ink-secondary);
+    }
+
+    .nav-group {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .nav-links {
+      display: none;
+    }
+
+    @media (min-width: 720px) {
+      .nav-links {
+        display: flex;
+        gap: 1.5rem;
+        font-size: 0.9rem;
+      }
+      .nav-links a {
+        text-decoration: none;
+        color: var(--ink-secondary);
+      }
+      .nav-links a:hover {
+        color: var(--ink-primary);
+        text-decoration: underline;
       }
     }
 
-    /* 1:1 Square Ratio Box */
-    .img-wrapper {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      overflow: hidden;
-      border-radius: 4px;
-      margin-bottom: 3px;
-      background-color: #f1f5f9;
+    /* Snipcart Basket Trigger Button */
+    .cart-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-strong);
+      color: var(--ink-primary);
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      padding: 0.45rem 0.8rem;
+      border-radius: var(--radius);
       cursor: pointer;
-      position: relative;
+      transition: background-color 0.15s ease;
     }
 
-    .img-wrapper img {
+    .cart-button:hover {
+      background: var(--bg-subtle);
+    }
+
+    /* =====================================================================
+       4. HERO & FEATURED UTILITY APP SPOTLIGHT
+       ===================================================================== */
+    .hero {
+      padding: 3.5rem 0 2.5rem;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--ink-secondary);
+      margin: 0 0 0.75rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(1.85rem, 4vw, 2.75rem);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      font-weight: 700;
+      max-width: 22ch;
+      margin: 0 0 1rem;
+    }
+
+    .hero-intro {
+      max-width: 58ch;
+      color: var(--ink-secondary);
+      font-size: 1.05rem;
+      margin: 0 0 2.25rem;
+    }
+
+    /* Prominent App Feature Card (Field Notes Spec-Sheet Style) */
+    .app-spotlight-wrapper {
+      margin-top: 1rem;
+    }
+
+    .app-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .app-card {
+        grid-template-columns: 1.35fr 1fr;
+        align-items: center;
+        padding: 2rem;
+      }
+    }
+
+    .spec-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.2rem 0.5rem;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-hairline);
+      border-radius: 2px;
+      margin-bottom: 0.75rem;
+    }
+
+    .app-card h2 {
+      font-size: 1.4rem;
+      letter-spacing: -0.02em;
+      margin: 0 0 0.5rem;
+    }
+
+    .app-card p {
+      color: var(--ink-secondary);
+      margin: 0 0 1rem;
+      font-size: 0.96rem;
+    }
+
+    .app-meta-list {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--ink-secondary);
+      border-top: 1px dashed var(--border-hairline);
+      padding-top: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .app-media {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius);
+      overflow: hidden;
+      aspect-ratio: 16 / 10;
+    }
+
+    .app-media img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.2s ease;
     }
 
-    .img-wrapper:hover img {
+    /* =====================================================================
+       5. SECTIONS & PRODUCT GRIDS
+       ===================================================================== */
+    .catalog-section {
+      padding: 3.5rem 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    @media (min-width: 720px) {
+      .section-header {
+        flex-direction: row;
+        align-items: baseline;
+        justify-content: space-between;
+      }
+    }
+
+    .section-header h2 {
+      font-size: 1.5rem;
+      letter-spacing: -0.02em;
+      margin: 0;
+    }
+
+    .section-note {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--ink-secondary);
+      margin: 0;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    @media (min-width: 640px) {
+      .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* =====================================================================
+       6. PRODUCT CARD (Ugmonk Photography Focus + Field Notes Spec Table)
+       ===================================================================== */
+    .product-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .product-image-wrap {
+      position: relative;
+      background: var(--bg-subtle);
+      aspect-ratio: 4 / 3;
+      border-bottom: 1px solid var(--border-hairline);
+      overflow: hidden;
+    }
+
+    .product-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.35s ease;
+    }
+
+    .product-card:hover .product-image-wrap img {
       transform: scale(1.02);
     }
 
-    /* Fixed-height title block to lock grid alignment */
-    .card-body h3 {
-      margin: 0 0 2px 0;
-      font-size: 0.82rem;
-      color: var(--primary);
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      height: 2.4em; 
-      line-height: 1.2em;
+    .status-tag {
+      position: absolute;
+      top: 0.75rem;
+      left: 0.75rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.25rem 0.55rem;
+      background: var(--bg-paper);
+      border: 1px solid var(--border-strong);
+      border-radius: 2px;
     }
 
-    @media (min-width: 640px) {
-      .card-body h3 {
-        font-size: 1rem;
+    .status-tag.sold-out {
+      background: var(--ink-primary);
+      color: var(--bg-paper);
+    }
+
+    .product-body {
+      padding: 1.35rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .product-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .product-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin: 0;
+    }
+
+    .product-price {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .product-desc {
+      color: var(--ink-secondary);
+      font-size: 0.94rem;
+      margin: 0 0 1.1rem;
+    }
+
+    /* Field Notes style specification strip */
+    .product-specs {
+      margin-top: auto;
+      margin-bottom: 1.25rem;
+      padding: 0.65rem 0.75rem;
+      background: var(--bg-paper);
+      border: 1px solid var(--border-hairline);
+      border-radius: 2px;
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      color: var(--ink-secondary);
+      line-height: 1.5;
+    }
+
+    .product-specs strong {
+      color: var(--ink-primary);
+      font-weight: 600;
+    }
+
+    /* =====================================================================
+       7. BUTTONS (Tactile, Clear States, Zero Fake Urgency)
+       ===================================================================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 0.75rem 1.1rem;
+      font-family: var(--font-sans);
+      font-size: 0.92rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: var(--radius);
+      border: 1px solid var(--border-strong);
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .btn-primary {
+      background-color: var(--accent-workshop);
+      border-color: var(--accent-workshop);
+      color: #FFFFFF;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--accent-hover);
+      border-color: var(--accent-hover);
+    }
+
+    .btn-secondary {
+      background-color: var(--bg-card);
+      color: var(--ink-primary);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--bg-subtle);
+    }
+
+    .btn-sold-out,
+    .btn:disabled {
+      background-color: var(--sold-out-bg);
+      border-color: var(--border-hairline);
+      color: var(--sold-out-text);
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .btn-inline {
+      width: auto;
+      padding: 0.7rem 1.35rem;
+    }
+
+    /* =====================================================================
+       8. WORKSHOP GUARANTEE BOX
+       ===================================================================== */
+    .guarantee-box {
+      margin-top: 2.5rem;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-hairline);
+      border-left: 3px solid var(--accent-workshop);
+      border-radius: var(--radius);
+      padding: 1.35rem 1.5rem;
+    }
+
+    .guarantee-box h3 {
+      font-size: 1rem;
+      margin: 0 0 0.4rem;
+      letter-spacing: -0.01em;
+    }
+
+    .guarantee-box p {
+      margin: 0;
+      font-size: 0.92rem;
+      color: var(--ink-secondary);
+      max-width: 72ch;
+    }
+
+    /* =====================================================================
+       9. ERROR / LOADING FEEDBACK STATES
+       ===================================================================== */
+    .status-banner {
+      padding: 1.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--ink-secondary);
+    }
+
+    /* =====================================================================
+       10. FOOTER & NATIVE LEGAL DIALOGS (UK PECR / GDPR COMPLIANT)
+       ===================================================================== */
+    .site-footer {
+      padding: 3rem 0 4rem;
+      font-size: 0.88rem;
+      color: var(--ink-secondary);
+    }
+
+    .footer-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 720px) {
+      .footer-grid {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
       }
     }
 
-    /* Option Container with Reduced Vertical Gap Between Rows */
-    .pill-container {
+    .footer-links {
       display: flex;
       flex-wrap: wrap;
-      column-gap: 3px;
-      row-gap: 1px;
-      margin: 3px 0 1px 0;
-      border-top: 1px solid var(--border-color);
-      border-bottom: 1px solid var(--border-color);
-      padding: 2px 0;
-      min-height: 48px;
-      align-content: flex-start;
+      gap: 1.25rem;
     }
 
-    .pill-option {
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-      padding: 2px 4px;
-      background: #f1f5f9;
-      border: 1px solid #cbd5e1;
-      border-radius: 4px;
-      font-size: 0.65rem;
-      font-weight: 500;
-      color: var(--text-color);
-      cursor: pointer;
-      user-select: none;
-      transition: all 0.15s ease;
-      flex-grow: 1;
-      justify-content: center;
-      text-align: center;
-      height: 20px;
-      box-sizing: border-box;
-    }
-
-    @media (min-width: 640px) {
-      .pill-option {
-        font-size: 0.78rem;
-        padding: 4px 8px;
-        height: 24px;
-      }
-    }
-
-    .pill-option input[type="checkbox"] {
-      display: none;
-    }
-
-    .pill-price {
-      color: var(--accent);
-      font-weight: 700;
-    }
-
-    .pill-option.selected {
-      background: var(--primary);
-      color: #ffffff;
-      border-color: var(--primary);
-      font-weight: 600;
-    }
-
-    .pill-option.selected .pill-price {
-      color: #ffffff;
-    }
-
-    .pill-option.out-of-stock {
-      opacity: 0.35;
-      cursor: not-allowed;
-      background: #e2e8f0;
-    }
-
-    /* Static Price Pill in Position 1 */
-    .pill-static-price {
-      display: inline-flex;
-      align-items: center;
-      padding: 2px 4px;
-      background: #fef3c7;
-      border: 1px solid #fde68a;
-      border-radius: 4px;
-      font-size: 0.65rem;
-      font-weight: 700;
-      color: var(--accent);
-      flex-grow: 1;
-      justify-content: center;
-      text-align: center;
-      height: 20px;
-      box-sizing: border-box;
-    }
-
-    @media (min-width: 640px) {
-      .pill-static-price {
-        font-size: 0.78rem;
-        padding: 4px 8px;
-        height: 24px;
-      }
-    }
-
-    /* Variant List Container with tight bottom margin */
-    .variant-list-container {
-      margin: 3px 0 1px 0;
-      border-top: 1px solid var(--border-color);
-      border-bottom: 1px solid var(--border-color);
-      padding: 2px 0;
-      min-height: 48px;
-      box-sizing: border-box;
-    }
-
-    .variant-header-row {
-      display: flex;
-      justify-content: flex-end;
-      font-size: 0.65rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 2px;
-      padding-right: 2px;
-    }
-
-    .variant-list {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      text-align: left;
-    }
-
-    .variant-option {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.75rem;
-      cursor: pointer;
-    }
-
-    @media (min-width: 640px) {
-      .variant-option {
-        font-size: 0.85rem;
-        gap: 8px;
-      }
-    }
-
-    .variant-option.out-of-stock {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
-
-    .variant-stock {
-      margin-left: auto;
-      color: var(--text-muted);
-      font-size: 0.7rem;
-    }
-
-    /* Card Footer Tight Alignment */
-    .card-footer {
-      margin-top: auto;
-      padding-top: 1px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-    }
-
-    button {
-      width: 100%;
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      padding: 5px 8px;
-      border-radius: 4px;
-      font-weight: 600;
-      font-size: 0.75rem;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-
-    @media (min-width: 640px) {
-      button {
-        padding: 8px 12px;
-        border-radius: 6px;
-        font-size: 0.85rem;
-      }
-    }
-
-    button:hover:not(:disabled) {
-      background-color: var(--primary-hover);
-    }
-
-    button:disabled {
-      background-color: #cbd5e1;
-      cursor: not-allowed;
-    }
-
-    /* Modal Popup Styling */
-    #modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(15, 23, 42, 0.8);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-      padding: 16px;
-    }
-
-    #modal-content {
-      background: var(--card-bg);
-      border-radius: 8px;
-      max-width: 500px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      padding: 20px;
-      position: relative;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    }
-
-    #modal-close {
-      position: absolute;
-      top: 12px;
-      right: 16px;
+    .footer-link-btn {
       background: none;
       border: none;
-      font-size: 1.4rem;
-      font-weight: bold;
-      color: var(--text-muted);
-      cursor: pointer;
-      width: auto;
       padding: 0;
+      font: inherit;
+      color: var(--ink-primary);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: pointer;
     }
 
-    .modal-img {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
-      border-radius: 4px;
-      margin-bottom: 12px;
+    /* Native HTML <dialog> modal styling */
+    dialog.policy-modal {
+      max-width: 600px;
+      width: calc(100% - 2rem);
+      background: var(--bg-paper);
+      color: var(--ink-primary);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
     }
 
-    #loading {
-      text-align: center;
-      grid-column: 1 / -1;
-      color: var(--text-muted);
-      padding: 40px;
+    dialog.policy-modal::backdrop {
+      background: rgba(31, 31, 31, 0.45);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-hairline);
+      padding-bottom: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      font-size: 1.15rem;
+    }
+
+    .modal-close {
+      background: var(--bg-card);
+      border: 1px solid var(--border-hairline);
+      border-radius: 2px;
+      padding: 0.25rem 0.6rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .policy-modal p, .policy-modal li {
+      font-size: 0.92rem;
+      color: var(--ink-secondary);
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <p>Quality Woodcraft Gifts</p>
-    <h1>Hercule Molly</h1>
+  <!-- =====================================================================
+       SITE HEADER
+       ===================================================================== -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#" class="brand-mark">
+        <span class="brand-title">Fenland Bench &amp; Browser</span>
+        <span class="brand-sub">Cambridgeshire, UK • Est. Whenever</span>
+      </a>
+
+      <div class="nav-group">
+        <nav class="nav-links" aria-label="Primary sections">
+          <a href="#apps">Utility Apps</a>
+          <a href="#woodcraft">Woodcraft</a>
+          <a href="#watercolours">Watercolours</a>
+        </nav>
+
+        <!-- Snipcart automatically binds to .snipcart-checkout & .snipcart-items-count -->
+        <button type="button" class="cart-button snipcart-checkout" aria-label="Open shopping basket">
+          <span>Basket</span>
+          <span>(<span class="snipcart-items-count">0</span>)</span>
+        </button>
+      </div>
+    </div>
   </header>
 
   <main>
-    <div id="product-grid">
-      <div id="loading">Loading catalog...</div>
-    </div>
+    <!-- ===================================================================
+         HERO + FEATURED UTILITY APP SECTION
+         =================================================================== -->
+    <section class="hero" id="apps">
+      <div class="container">
+        <p class="hero-eyebrow">Independent Maker Hub — Cambridgeshire</p>
+        <h1>Offcut timber, small useful software, and slightly wonky watercolours.</h1>
+        <p class="hero-intro">
+          No newsletter pop-ups, no countdown timers, and nothing mass-produced. Just things made slowly in a damp shed or coded on a rainy Tuesday when the glue is drying.
+        </p>
+
+        <!-- Dynamic container populated from CSV rows where category === 'app' -->
+        <div id="app-container" class="app-spotlight-wrapper" aria-live="polite">
+          <div class="status-banner">Loading workshop index from products.csv…</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         RECYCLED WOODCRAFT SECTION (Direct Snipcart Checkout)
+         =================================================================== -->
+    <section class="catalog-section" id="woodcraft">
+      <div class="container">
+        <div class="section-header">
+          <h2>Recycled Woodcraft</h2>
+          <p class="section-note">Batch 01 • Reclaimed timber • Strictly one-off pieces</p>
+        </div>
+
+        <!-- Dynamic grid populated from CSV rows where category === 'woodcraft' -->
+        <div id="woodcraft-grid" class="product-grid" aria-live="polite"></div>
+
+        <!-- Calm, Plain-English Workshop Guarantee -->
+        <aside class="guarantee-box" aria-label="Workshop Guarantee">
+          <h3>The Workshop Guarantee</h3>
+          <p>
+            Every wooden piece is handcrafted in Cambridgeshire from reclaimed or salvaged timber—meaning knots, old nail holes, and minor tool marks are part of the C.V., not defects. Orders are packed in recycled cardboard and dispatched via <strong>Royal Mail Tracked 48</strong> within two working days. If something arrives damaged or simply isn't right for your shelf, send it back within 30 days for a full, quibble-free refund.
+          </p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         RUBBISHY WATERCOLOURS SECTION (Outbound Etsy Links)
+         =================================================================== -->
+    <section class="catalog-section" id="watercolours">
+      <div class="container">
+        <div class="section-header">
+          <h2>"Rubbishy" Watercolours</h2>
+          <p class="section-note">Printed on mugs, tees &amp; cards • Fulfilled via Etsy</p>
+        </div>
+
+        <!-- Dynamic grid populated from CSV rows where category === 'watercolour' -->
+        <div id="watercolour-grid" class="product-grid" aria-live="polite"></div>
+      </div>
+    </section>
   </main>
 
-  <!-- Product Detail Modal -->
-  <div id="modal-overlay" onclick="closeModal(event)">
-    <div id="modal-content" onclick="event.stopPropagation()">
-      <button id="modal-close" onclick="closeModal()">×</button>
-      <img id="modal-img" class="modal-img" src="" alt="" />
-      <h2 id="modal-title" style="margin: 0 0 6px 0; font-size: 1.2rem; color: var(--primary);"></h2>
-      <p id="modal-wood" class="wood-type" style="margin-bottom: 8px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;"></p>
-      <p id="modal-price" class="price" style="margin-bottom: 12px;"></p>
-      <p id="modal-desc" style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin: 0;"></p>
+  <!-- =====================================================================
+       FOOTER & UK COMPLIANCE DIALOGS
+       ===================================================================== -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <strong>Fenland Bench &amp; Browser</strong><br>
+        Made in Cambridgeshire, United Kingdom.<br>
+        <span style="font-family: var(--font-mono); font-size: 0.78rem;">No tracking pixels. No third-party ad cookies.</span>
+      </div>
+
+      <div class="footer-links">
+        <button type="button" class="footer-link-btn" data-open-modal="modal-shipping">
+          UK Shipping &amp; Returns
+        </button>
+        <button type="button" class="footer-link-btn" data-open-modal="modal-privacy">
+          Privacy &amp; Essential Storage
+        </button>
+      </div>
     </div>
+  </footer>
+
+  <!-- Modal 1: UK Shipping & Returns -->
+  <dialog id="modal-shipping" class="policy-modal" aria-labelledby="shipping-title">
+    <div class="modal-header">
+      <h3 id="shipping-title">UK Shipping &amp; Returns</h3>
+      <button type="button" class="modal-close" data-close-modal>Close</button>
+    </div>
+    <p><strong>Woodcraft Dispatch:</strong> All physical woodcraft items are packed in my Cambridgeshire workshop and posted within 48 hours (Monday–Friday) via Royal Mail Tracked 48. Postage is calculated honestly by weight at checkout.</p>
+    <p><strong>Watercolour Prints &amp; Mugs:</strong> Watercolour items link out to my official Etsy shop and are printed to order by my UK print partner, covered by Etsy's buyer protection.</p>
+    <p><strong>Returns:</strong> Under UK Consumer Contracts Regulations (and common decency), you may return any woodcraft item within 30 days of delivery in its original condition for a full refund.</p>
+  </dialog>
+
+  <!-- Modal 2: Privacy & Essential Storage (UK PECR / GDPR) -->
+  <dialog id="modal-privacy" class="policy-modal" aria-labelledby="privacy-title">
+    <div class="modal-header">
+      <h3 id="privacy-title">Privacy &amp; Essential Cookies</h3>
+      <button type="button" class="modal-close" data-close-modal>Close</button>
+    </div>
+    <p>This website uses <strong>zero analytics, advertising trackers, or behavioural profiling</strong>. Because nothing tracks you across the web, we do not bother you with a cookie consent banner.</p>
+    <p>Under UK PECR regulations, only strictly necessary browser storage is used when you actively interact with site features:</p>
+    <ul>
+      <li><strong>Shopping Basket &amp; Checkout (Snipcart &amp; Stripe):</strong> Stores your basket contents, delivery address, and optional customer login session so you can complete a purchase securely.</li>
+      <li><strong>Local Utility Apps:</strong> Saves your preferred UK postcode locally in your browser's storage so you don't have to re-type it every time you check if it's safe to hang the washing out.</li>
+    </ul>
+  </dialog>
+
+  <!-- =====================================================================
+       SNIPCART V3 CONTAINER & SCRIPT
+       Replace the placeholder API key below with your live or test Snipcart key.
+       ===================================================================== -->
+  <div hidden id="snipcart"
+       data-api-key="<!-- PASTE YOUR SNIPCART PUBLIC API KEY HERE -->"
+       data-config-modal-style="side"
+       data-currency="gbp">
   </div>
+  <script async src="https://cdn.snipcart.com/themes/v3.7.1/default/snipcart.js"></script>
 
+  <!-- =====================================================================
+       VANILLA JAVASCRIPT: CSV PARSER, DEFENSIVE RENDERER & MODALS
+       ===================================================================== -->
   <script>
-    let allProducts = [];
+    (function () {
+      'use strict';
 
-    async function loadProducts() {
-      try {
-        const response = await fetch('products.csv');
-        const csvText = await response.text();
-        allProducts = parseCSV(csvText);
-        renderProducts(allProducts);
-      } catch (error) {
-        console.error('Error loading products.csv:', error);
-        document.getElementById('product-grid').innerHTML = '<p style="text-align: center; color: red;">Could not load products. Please check products.csv format.</p>';
-      }
-    }
+      // Clean inline SVG fallback if a product image file is missing or mistyped in CSV
+      const FALLBACK_IMAGE_SVG =
+        'data:image/svg+xml;charset=UTF-8,' +
+        encodeURIComponent(
+          `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+            <rect width="800" height="600" fill="#F1EDE4"/>
+            <rect x="24" y="24" width="752" height="552" fill="none" stroke="#DED9CE" stroke-width="2" stroke-dasharray="8 8"/>
+            <text x="400" y="290" font-family="monospace" font-size="18" fill="#575550" text-anchor="middle">WORKSHOP PHOTOGRAPH PENDING</text>
+            <text x="400" y="320" font-family="monospace" font-size="13" fill="#84817A" text-anchor="middle">(Image file not yet in folder)</text>
+          </svg>`
+        );
 
-    function parseCSV(text) {
-      const lines = text.trim().split('\n');
-      const headers = lines[0].split(',').map(h => h.trim());
-      const result = [];
+      /**
+       * RFC-4180 compliant CSV parser.
+       * Safely handles:
+       *  - Quoted fields containing commas (e.g. "Oak, ash, and brass")
+       *  - Escaped double quotes ("") inside quoted fields
+       *  - Windows (\r\n) and Unix (\n) line endings
+       *  - Empty trailing rows from LibreOffice Calc exports
+       */
+      function parseCSV(text) {
+        const rows = [];
+        let currentRow = [];
+        let currentField = '';
+        let inQuotes = false;
 
-      for (let i = 1; i < lines.length; i++) {
-        const currentLine = lines[i].trim();
-        if (!currentLine) continue;
+        // Strip UTF-8 BOM if LibreOffice Calc included one
+        const cleanText = text.replace(/^\uFEFF/, '');
 
-        const values = [];
-        let inQuote = false;
-        let currentValue = '';
-        
-        for (let char of currentLine) {
-          if (char === '"') {
-            inQuote = !inQuote;
-          } else if (char === ',' && !inQuote) {
-            values.push(currentValue.trim());
-            currentValue = '';
-          } else {
-            currentValue += char;
-          }
-        }
-        values.push(currentValue.trim());
+        for (let i = 0; i < cleanText.length; i++) {
+          const char = cleanText[i];
+          const nextChar = cleanText[i + 1];
 
-        const item = {};
-        headers.forEach((header, index) => {
-          item[header] = values[index] !== undefined ? values[index].replace(/^"|"$/g, '') : '';
-        });
-        result.push(item);
-      }
-      return result;
-    }
-
-    function renderProducts(products) {
-      const container = document.getElementById('product-grid');
-      container.innerHTML = '';
-
-      const grouped = {};
-      products.forEach(item => {
-        if (item.status && item.status.toLowerCase() === 'draft') return;
-
-        const key = item.group_id && item.group_id.trim() !== '' ? item.group_id : item.id;
-        if (!grouped[key]) grouped[key] = [];
-        grouped[key].push(item);
-      });
-
-      Object.keys(grouped).forEach(key => {
-        const items = grouped[key];
-        const isGrouped = items.length > 1;
-        const card = document.createElement('div');
-        card.className = 'product-card';
-
-        const mainDesc = items[0].desc;
-        const mainImage = items[0].image;
-        const mainWood = items[0].wood || '';
-        const mainLongDesc = items[0].long_desc || 'Handcrafted quality woodcraft gift.';
-
-        if (!isGrouped) {
-          // --- STANDALONE ITEM ---
-          const p = items[0];
-          const stockCount = parseInt(p.stock) || 0;
-          const isOut = stockCount <= 0;
-          const itemLongDesc = p.long_desc || 'Handcrafted quality woodcraft gift.';
-          const woodLabel = p.wood ? p.wood : 'Standard';
-
-          card.innerHTML = `
-            <div>
-              <div class="img-wrapper" onclick="openModal('${p.image}', '${p.desc.replace(/'/g, "\\'")}', '${p.wood || ''}', '£${parseFloat(p.price).toFixed(2)}', '${itemLongDesc.replace(/'/g, "\\'")}')">
-                <img src="${p.image}" alt="${p.desc}" />
-              </div>
-              <div class="card-body">
-                <h3>${p.desc}</h3>
-                <div class="pill-container">
-                  <label class="pill-option ${isOut ? 'out-of-stock' : ''}">
-                    <input type="checkbox" 
-                           name="group-${key}" 
-                           value="${p.id}" 
-                           data-price="${p.price}" 
-                           ${isOut ? 'disabled' : ''} 
-                           onchange="togglePill(this, '${key}')">
-                    <span>${woodLabel}</span> <span class="pill-price">£${parseFloat(p.price).toFixed(2)}</span>
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div class="card-footer">
-              <button id="btn-${key}" disabled>${isOut ? 'Sold Out' : 'Add Selection'}</button>
-            </div>
-          `;
-        } else {
-          // --- GROUPED BOX ---
-          const layoutType = items[0].layout ? items[0].layout.toLowerCase() : 'collection';
-          const firstPrice = parseFloat(items[0].price);
-          const pricesAllSame = items.every(i => parseFloat(i.price) === firstPrice);
-
-          let innerOptionsHTML = '';
-
-          if (layoutType === 'collection') {
-            innerOptionsHTML = '<div class="pill-container">';
-            
-            // First Pill: Static "Price Each" if all prices match
-            if (pricesAllSame) {
-              innerOptionsHTML += `<div class="pill-static-price">£${firstPrice.toFixed(2)} each</div>`;
+          if (inQuotes) {
+            if (char === '"' && nextChar === '"') {
+              currentField += '"';
+              i++; // Skip escaped quote
+            } else if (char === '"') {
+              inQuotes = false;
+            } else {
+              currentField += char;
             }
-
-            items.forEach(item => {
-              const stockCount = parseInt(item.stock) || 0;
-              const disabled = stockCount <= 0;
-              const labelBase = item.short_name ? item.short_name : (item.wood ? item.wood : item.id);
-              
-              const labelHTML = pricesAllSame 
-                ? `<span>${labelBase}</span>` 
-                : `<span>${labelBase}</span> <span class="pill-price">£${parseFloat(item.price).toFixed(2)}</span>`;
-
-              innerOptionsHTML += `
-                <label class="pill-option ${disabled ? 'out-of-stock' : ''}">
-                  <input type="checkbox" 
-                         name="group-${key}" 
-                         value="${item.id}" 
-                         data-price="${item.price}" 
-                         ${disabled ? 'disabled' : ''} 
-                         onchange="togglePill(this, '${key}')">
-                  ${labelHTML}
-                </label>
-              `;
-            });
-            innerOptionsHTML += '</div>';
           } else {
-            // --- VARIANT LIST ---
-            innerOptionsHTML = `
-              <div class="variant-list-container">
-                <div class="variant-header-row">
-                  <span>Stock</span>
-                </div>
-                <div class="variant-list">
-            `;
-            items.forEach(item => {
-              const stockCount = parseInt(item.stock) || 0;
-              const disabled = stockCount <= 0;
-              const woodLabel = item.wood ? item.wood : item.desc;
-              const formattedPrice = parseFloat(item.price).toFixed(2);
-              const priceTag = pricesAllSame ? '' : ` — <strong style="color: var(--accent);">£${formattedPrice}</strong>`;
-
-              innerOptionsHTML += `
-                <label class="variant-option ${disabled ? 'out-of-stock' : ''}">
-                  <input type="checkbox" 
-                         name="group-${key}" 
-                         value="${item.id}" 
-                         data-price="${item.price}" 
-                         ${disabled ? 'disabled' : ''} 
-                         onchange="updateGroupButton('${key}')">
-                  <span><strong>${item.id}</strong> — ${woodLabel}${priceTag}</span>
-                  <span class="variant-stock">${disabled ? '0' : stockCount}</span>
-                </label>
-              `;
-            });
-            innerOptionsHTML += `</div></div>`;
+            if (char === '"') {
+              inQuotes = true;
+            } else if (char === ',') {
+              currentRow.push(currentField.trim());
+              currentField = '';
+            } else if (char === '\r' && nextChar === '\n') {
+              currentRow.push(currentField.trim());
+              rows.push(currentRow);
+              currentRow = [];
+              currentField = '';
+              i++; // Skip \n
+            } else if (char === '\n' || char === '\r') {
+              currentRow.push(currentField.trim());
+              rows.push(currentRow);
+              currentRow = [];
+              currentField = '';
+            } else {
+              currentField += char;
+            }
           }
+        }
 
-          const displayPriceStr = pricesAllSame ? `£${firstPrice.toFixed(2)}` : 'Various Prices';
+        // Push final field/row if file didn't end with a newline
+        if (currentField.length > 0 || currentRow.length > 0) {
+          currentRow.push(currentField.trim());
+          rows.push(currentRow);
+        }
 
-          card.innerHTML = `
+        // Filter out completely blank trailing lines
+        const nonEmptyRows = rows.filter(row => row.some(cell => cell !== ''));
+        if (nonEmptyRows.length < 2) return [];
+
+        const headers = nonEmptyRows[0].map(h => h.toLowerCase());
+        return nonEmptyRows.slice(1).map(row => {
+          const item = {};
+          headers.forEach((header, index) => {
+            item[header] = row[index] !== undefined ? row[index] : '';
+          });
+          return item;
+        });
+      }
+
+      /**
+       * Escapes HTML special characters to prevent broken markup from CSV text.
+       */
+      function escapeHTML(str) {
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      /**
+       * Formats numeric GBP price cleanly (e.g., "28" -> "£28.00", "14.5" -> "£14.50").
+       */
+      function formatGBP(value) {
+        const num = parseFloat(value);
+        if (isNaN(num)) return '£0.00';
+        return '£' + num.toFixed(2);
+      }
+
+      /**
+       * Builds the featured Utility App card (category: "app").
+       */
+      function renderAppSpotlight(item) {
+        const imgSrc = item.image_filename ? escapeHTML(item.image_filename) : FALLBACK_IMAGE_SVG;
+        const launchUrl = item.external_url ? escapeHTML(item.external_url) : '#';
+
+        return `
+          <article class="app-card">
             <div>
-              <div class="img-wrapper" onclick="openModal('${mainImage}', '${mainDesc.replace(/'/g, "\\'")}', '${mainWood}', '${displayPriceStr}', '${mainLongDesc.replace(/'/g, "\\'")}')">
-                <img src="${mainImage}" alt="${mainDesc}" />
-              </div>
-              <div class="card-body">
-                <h3>${mainDesc}</h3>
-                ${innerOptionsHTML}
-              </div>
+              <span class="spec-badge">Featured Utility App • Free to Use</span>
+              <h2>${escapeHTML(item.title)}</h2>
+              <p>${escapeHTML(item.description)}</p>
+              ${item.specs ? `<div class="app-meta-list"><strong>SPEC:</strong> ${escapeHTML(item.specs)}</div>` : ''}
+              <a href="${launchUrl}" class="btn btn-primary btn-inline">
+                Launch App &rarr;
+              </a>
             </div>
-            <div class="card-footer">
-              <button id="btn-${key}" disabled>Add Selection</button>
+            <div class="app-media">
+              <img src="${imgSrc}"
+                   alt="${escapeHTML(item.title)}"
+                   loading="eager"
+                   onerror="this.onerror=null;this.src='${FALLBACK_IMAGE_SVG}';">
             </div>
+          </article>
+        `;
+      }
+
+      /**
+       * Builds a Woodcraft or Watercolour product card.
+       */
+      function renderProductCard(item) {
+        const category = (item.category || '').toLowerCase();
+        const stockCount = parseInt(item.stock, 10);
+        const isSoldOut = category === 'woodcraft' && (!isNaN(stockCount) && stockCount <= 0);
+        const imgSrc = item.image_filename ? escapeHTML(item.image_filename) : FALLBACK_IMAGE_SVG;
+        const formattedPrice = formatGBP(item.price_gbp);
+        const numericPrice = (parseFloat(item.price_gbp) || 0).toFixed(2);
+        const weightGrams = parseInt(item.weight_grams, 10) || 250;
+
+        // Current canonical URL needed by Snipcart for price/inventory validation
+        const currentPageUrl = window.location.origin + window.location.pathname;
+
+        // Status badge on top-left of image
+        let badgeHTML = '';
+        if (category === 'woodcraft') {
+          badgeHTML = isSoldOut
+            ? `<span class="status-tag sold-out">Sold Out</span>`
+            : `<span class="status-tag">1 of 1 • In Stock</span>`;
+        } else if (category === 'watercolour') {
+          badgeHTML = `<span class="status-tag">Print-on-Demand</span>`;
+        }
+
+        // Action button logic based on category & stock
+        let actionButtonHTML = '';
+        if (category === 'woodcraft') {
+          if (isSoldOut) {
+            actionButtonHTML = `
+              <button type="button" class="btn btn-sold-out" disabled aria-disabled="true">
+                Sold Out — Gone to a Good Home
+              </button>
+            `;
+          } else {
+            actionButtonHTML = `
+              <button type="button"
+                class="btn btn-primary snipcart-add-item"
+                data-item-id="${escapeHTML(item.id)}"
+                data-item-name="${escapeHTML(item.title)}"
+                data-item-price="${numericPrice}"
+                data-item-weight="${weightGrams}"
+                data-item-url="${escapeHTML(currentPageUrl)}"
+                data-item-max-quantity="${isNaN(stockCount) ? 1 : stockCount}"
+                data-item-description="${escapeHTML(item.description)}"
+                data-item-image="${imgSrc}">
+                Add to Basket — ${formattedPrice}
+              </button>
+            `;
+          }
+        } else if (category === 'watercolour') {
+          const etsyUrl = item.external_url ? escapeHTML(item.external_url) : 'https://www.etsy.com';
+          actionButtonHTML = `
+            <a href="${etsyUrl}"
+               target="_blank"
+               rel="noopener"
+               class="btn btn-secondary">
+              Buy on Etsy &nearr;
+            </a>
           `;
         }
 
-        container.appendChild(card);
-      });
-    }
-
-    function togglePill(checkbox, groupKey) {
-      const label = checkbox.closest('.pill-option');
-      if (checkbox.checked) {
-        label.classList.add('selected');
-      } else {
-        label.classList.remove('selected');
+        return `
+          <article class="product-card">
+            <div class="product-image-wrap">
+              ${badgeHTML}
+              <img src="${imgSrc}"
+                   alt="${escapeHTML(item.title)}"
+                   loading="lazy"
+                   onerror="this.onerror=null;this.src='${FALLBACK_IMAGE_SVG}';">
+            </div>
+            <div class="product-body">
+              <div class="product-top">
+                <h3 class="product-title">${escapeHTML(item.title)}</h3>
+                <span class="product-price">${formattedPrice}</span>
+              </div>
+              <p class="product-desc">${escapeHTML(item.description)}</p>
+              ${item.specs ? `<div class="product-specs"><strong>SPECS:</strong> ${escapeHTML(item.specs)}</div>` : ''}
+              ${actionButtonHTML}
+            </div>
+          </article>
+        `;
       }
-      updateGroupButton(groupKey);
-    }
 
-    function updateGroupButton(groupKey) {
-      const checkboxes = document.querySelectorAll(`input[name="group-${groupKey}"]:checked`);
-      const btnEl = document.getElementById(`btn-${groupKey}`);
-      btnEl.disabled = checkboxes.length === 0;
-    }
+      /**
+       * Fetches products.csv and populates all sections.
+       */
+      async function loadCatalogue() {
+        const appContainer = document.getElementById('app-container');
+        const woodcraftGrid = document.getElementById('woodcraft-grid');
+        const watercolourGrid = document.getElementById('watercolour-grid');
 
-    function openModal(img, title, wood, price, desc) {
-      document.getElementById('modal-img').src = img;
-      document.getElementById('modal-title').innerText = title;
-      document.getElementById('modal-wood').innerText = wood;
-      document.getElementById('modal-price').innerText = price;
-      document.getElementById('modal-desc').innerText = desc;
-      document.getElementById('modal-overlay').style.display = 'flex';
-    }
+        try {
+          // cache: 'no-store' ensures LibreOffice CSV edits show up immediately on refresh
+          const response = await fetch('products.csv', { cache: 'no-store' });
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
 
-    function closeModal() {
-      document.getElementById('modal-overlay').style.display = 'none';
-    }
+          const csvText = await response.text();
+          const items = parseCSV(csvText);
 
-    loadProducts();
+          const apps = items.filter(i => i.category.toLowerCase() === 'app');
+          const woodcraft = items.filter(i => i.category.toLowerCase() === 'woodcraft');
+          const watercolours = items.filter(i => i.category.toLowerCase() === 'watercolour');
+
+          // Render App Spotlight
+          if (apps.length > 0) {
+            appContainer.innerHTML = apps.map(renderAppSpotlight).join('');
+          } else {
+            appContainer.innerHTML = `<div class="status-banner">No utility apps listed in products.csv yet.</div>`;
+          }
+
+          // Render Woodcraft Grid
+          if (woodcraft.length > 0) {
+            woodcraftGrid.innerHTML = woodcraft.map(renderProductCard).join('');
+          } else {
+            woodcraftGrid.innerHTML = `<div class="status-banner">The workbench is currently bare. New batch soon.</div>`;
+          }
+
+          // Render Watercolours Grid
+          if (watercolours.length > 0) {
+            watercolourGrid.innerHTML = watercolours.map(renderProductCard).join('');
+          } else {
+            watercolourGrid.innerHTML = `<div class="status-banner">No watercolours currently listed.</div>`;
+          }
+
+        } catch (error) {
+          console.error('Catalogue load error:', error);
+          const fallbackHTML = `
+            <div class="status-banner" role="alert">
+              <strong>Workshop ledger temporarily unavailable.</strong><br>
+              Could not load <code>products.csv</code>. If you are previewing this file locally, please open it via a local web server rather than double-clicking the HTML file directly.
+            </div>
+          `;
+          appContainer.innerHTML = fallbackHTML;
+          woodcraftGrid.innerHTML = '';
+          watercolourGrid.innerHTML = '';
+        }
+      }
+
+      /**
+       * Native <dialog> modal handlers for UK Shipping & Privacy notices.
+       */
+      function initModals() {
+        document.querySelectorAll('[data-open-modal]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const modalId = btn.getAttribute('data-open-modal');
+            const dialog = document.getElementById(modalId);
+            if (dialog && typeof dialog.showModal === 'function') {
+              dialog.showModal();
+            }
+          });
+        });
+
+        document.querySelectorAll('[data-close-modal]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const dialog = btn.closest('dialog');
+            if (dialog) dialog.close();
+          });
+        });
+
+        // Allow clicking backdrop to close
+        document.querySelectorAll('dialog.policy-modal').forEach(dialog => {
+          dialog.addEventListener('click', (event) => {
+            if (event.target === dialog) {
+              dialog.close();
+            }
+          });
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        initModals();
+        loadCatalogue();
+      });
+    })();
   </script>
 </body>
 </html>
